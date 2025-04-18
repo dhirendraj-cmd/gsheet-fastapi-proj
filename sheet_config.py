@@ -22,20 +22,52 @@ sheets_service = build("sheets", "v4", credentials=creds_data).spreadsheets()
 sheet_id = os.environ.get("sheet_id")
 # print(sheet_id)
 
+# sheets_service.values().append(
+#     spreadsheetId = sheet_id,
+#     range = "Sheet1!A1",
+#     valueInputOption = "RAW",
+#     body = {
+#         "values": [
+#             ["testing", "test"],
+#             ["some"]
+#         ]
+#     }
+# ).execute()
+
+
+# creating new sheets programatically
+response = sheets_service.create(body={
+    "properties": {
+        "title": "Sheet1"
+    }
+}).execute()
+
+new_sheet_id  = response['spreadsheetId']
+print(new_sheet_id)
+
+sheet_url = response['spreadsheetUrl']
+print(sheet_url)
 
 # inserting new value in sheet
 
 sheets_service.values().append(
-    spreadsheetId = sheet_id,
+    spreadsheetId = new_sheet_id,
     range = "Sheet1!A1",
     valueInputOption = "RAW",
     body = {
         "values": [
-            ["testing", "test"],
-            ["some"]
+            ["something new", "test"],
+            ["soyes boss me"]
         ]
     }
 ).execute()
 
 
+# get values i.e. select in sql
+res = sheets_service.values().get(
+    spreadsheetId = new_sheet_id,
+    range = "Sheet1!A1:Z100",
+).execute()
+
+print(res)
 
