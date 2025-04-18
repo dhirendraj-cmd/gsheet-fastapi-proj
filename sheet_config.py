@@ -71,3 +71,19 @@ res = sheets_service.values().get(
 
 print(res)
 
+
+# manage permissions through google drive api
+drive_service = build("drive", "v3", credentials=creds_data)
+print(drive_service)
+
+drive_service.permissions().create(
+    fileId=new_sheet_id,
+    body={
+        "role": "writer",
+        "type": "user",
+        "emailAddress": os.environ.get("emailAddress"),
+    },
+    fields="id"
+).execute()
+
+
